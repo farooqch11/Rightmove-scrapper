@@ -73,4 +73,4 @@ gem 'dotenv'
 gem 'httparty'
 gem 'json'
 gem 'csv'
-
+gem 'activeadmin'

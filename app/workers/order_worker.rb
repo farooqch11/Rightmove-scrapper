@@ -99,9 +99,9 @@ class OrderWorker
       customer =  {"first_name": "Madewell", "email": "admin@wearlively.com"}
       order = ShopifyAPI::Order.create(line_items: line_items, tags: tags, note_attributes: note_attributes, billing_address: shipping_address, shipping_address: shipping_address, customer: customer, shipping_lines: shipping_lines )
       order.save
-
-      thehash = {:madewellid =>madewellorderid, :shopifyid=>order.id}
-      @all_orders_ids.push(thehash)
+      order = Order.create(name: order.name,details: madewellorder,madewell_id:madewellorder[:orderid],shopify_id: order.id)
+      # thehash = {:madewellid =>madewellorderid, :shopifyid=>order.id}
+      # @all_orders_ids.push(thehash)
       sleep(0.12)
     end
 
