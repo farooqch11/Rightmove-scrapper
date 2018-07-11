@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  require 'sidekiq/web'
+  authenticate :admin_user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
+  resources :orders do
+    collection do
+      post 'update_order_status'
+    end
+  end
+
 end

@@ -16,6 +16,7 @@ ActiveAdmin.register Order do
     column :name
     column :shopify_id
     column :madewell_id
+    column :status
     actions
   end
 

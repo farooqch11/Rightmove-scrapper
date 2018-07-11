@@ -20,7 +20,7 @@ class OrderWorker
 # In production, will need to hit the API for all accepted orders:
 # or11 = HTTParty.get("#{ENV["MIRAKL_URL"]}/api/orders?order_state_codes=SHIPPING", { headers: {"Authorization" => "#{ENV["SHOP_KEY"]}"} })
 # Example of what the API will return:
-    file2 = File.read('sample-OR11.json')
+    file2 = File.read('sample2.json')
     or11 = JSON.parse(file2)
 
 # Loop through all the orders, push the IDs into a var / array
@@ -28,6 +28,10 @@ class OrderWorker
     or11['orders'].each do |theorder|
       # OR21 = accept the order
       orderid = theorder['order_id']
+      order = Order.find_by_madewell_id(orderid)
+      if order.present?
+        next
+      end
       # Loop through the line items and crossref with a CSV/hash that has variant id next to SKU
       # order_lines
       line_items = Array.new
@@ -78,7 +82,7 @@ class OrderWorker
         end
 
         # push the order info to a hash
-        the_order = { :line_items => line_items, :shipping_address => shipping_address, :orderid => orderid, :shipping_lines => shipping_lines  }
+        the_order = { :line_items => line_items, :shipping_address => shipping_address, :orderid => orderid, :shipping_lines => shipping_lines ,:email=>theorder['customer']['email'] }
 
         @all_orders.push(the_order)
       end
@@ -96,10 +100,10 @@ class OrderWorker
       line_items = madewellorder[:line_items]
       shipping_address = madewellorder[:shipping_address][0]
       shipping_lines = madewellorder[:shipping_lines]
-      customer =  {"first_name": "Madewell", "email": "admin@wearlively.com"}
+      customer =  {"first_name": shipping_address[:first_name] + shipping_address[:last_name], "email": madewellorder[:email]}
       order = ShopifyAPI::Order.create(line_items: line_items, tags: tags, note_attributes: note_attributes, billing_address: shipping_address, shipping_address: shipping_address, customer: customer, shipping_lines: shipping_lines )
       order.save
-      order = Order.create(name: order.name,details: madewellorder,madewell_id:madewellorder[:orderid],shopify_id: order.id)
+      order = Order.create(name: order.name,details: madewellorder,madewell_id:madewellorder[:orderid],shopify_id: order.id,status: Order.statuses[:pushed_to_shopify])
       # thehash = {:madewellid =>madewellorderid, :shopifyid=>order.id}
       # @all_orders_ids.push(thehash)
       sleep(0.12)
