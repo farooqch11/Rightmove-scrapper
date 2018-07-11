@@ -20,7 +20,7 @@ class OrderWorker
 # In production, will need to hit the API for all accepted orders:
 # or11 = HTTParty.get("#{ENV["MIRAKL_URL"]}/api/orders?order_state_codes=SHIPPING", { headers: {"Authorization" => "#{ENV["SHOP_KEY"]}"} })
 # Example of what the API will return:
-    file2 = File.read('sample2.json')
+    file2 = File.read('sample-OR11.json')
     or11 = JSON.parse(file2)
 
 # Loop through all the orders, push the IDs into a var / array
@@ -44,7 +44,8 @@ class OrderWorker
         # Right now hard coding a specific variant ID. Ignore.
         # variantid = '277519499270'
         # print variantid
-        thehash = {'variant_id': variantid,
+        inventory = Inventory.find_by_sku(sku)
+        thehash = {'variant_id': inventory.shopify_variant,
                    'quantity': quantity ,
                    'Name': madewelllineitems['product_title'],
                    'title': madewelllineitems['product_title'],
