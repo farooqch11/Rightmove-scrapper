@@ -9,7 +9,7 @@ class CrawlWorker
   include Sidekiq::Worker
   sidekiq_options :retry => 5
 
-  def perform(url)
+  def perform(url,total_pages)
 
       begin
         Capybara.register_driver :firefox do |app|
@@ -21,9 +21,9 @@ class CrawlWorker
           # profile.proxy = Selenium::WebDriver::Proxy.new http: '199.247.13.177:31280', ssl: '199.247.13.177:31280'
           options = Selenium::WebDriver::Firefox::Options.new(profile: profile)
           client = Selenium::WebDriver::Remote::Http::Default.new
-          client.read_timeout = 200 # instead of the default 60
-          client.open_timeout = 200 # instead of the default 60
-          # options.args << '--headless'
+          client.read_timeout = 150 # instead of the default 60
+          client.open_timeout = 150 # instead of the default 60
+          options.args << '--headless'
           options.args << '--no-sandbox'
           options.args << '--disable-gpu'
           options.args << '--disable-infobars'
@@ -42,14 +42,14 @@ class CrawlWorker
         driver = browser.driver.browser
         # driver.manage.timeouts.page_load = 120
 
-        (1..1).each do |i|
+        (1..total_pages.to_i).each do |i|
 
-          # if i==1
-          #   url = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E601&maxBedrooms=3&minBedrooms=3&maxPrice=100000&minPrice=50000&index=#{1}&propertyTypes=detached%2Csemi-detached%2Cterraced&primaryDisplayPropertyType=houses&includeSSTC=false"
-          # else
-          #   url = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E601&maxBedrooms=3&minBedrooms=3&maxPrice=100000&minPrice=50000&index=#{i*24}&propertyTypes=detached%2Csemi-detached%2Cterraced&primaryDisplayPropertyType=houses&includeSSTC=false"
-          #
-          # end
+          if i==1
+            url = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E601&maxBedrooms=3&minBedrooms=3&maxPrice=100000&minPrice=50000&index=#{1}&propertyTypes=detached%2Csemi-detached%2Cterraced&primaryDisplayPropertyType=houses&includeSSTC=false"
+          else
+            url = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E601&maxBedrooms=3&minBedrooms=3&maxPrice=100000&minPrice=50000&index=#{i*24}&propertyTypes=detached%2Csemi-detached%2Cterraced&primaryDisplayPropertyType=houses&includeSSTC=false"
+
+          end
 
           puts url
           puts i
@@ -78,8 +78,12 @@ class CrawlWorker
                 next
               end
 
+              begin
+                browser.visit "https://www.rightmove.co.uk#{page_url}"
+              rescue
+                next
+              end
 
-              browser.visit "https://www.rightmove.co.uk#{page_url}"
 
               browser.click_link('Market Info')
 

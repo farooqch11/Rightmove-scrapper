@@ -9,7 +9,7 @@ ActiveAdmin.register Property do
   end
 
   collection_action :start_worker, title: "worker", method: :post do
-    CrawlWorker.perform_async(params[:data][:url])
+    CrawlWorker.perform_async(params[:data][:url], params[:data][:total_pages])
     redirect_to admin_dashboard_path
   end
 end
