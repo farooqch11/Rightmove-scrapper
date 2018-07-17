@@ -20,6 +20,9 @@ class CrawlWorker
           # profile['general.useragent.override'] = "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.9 (KHTML, like Gecko) Hana/1.1"
           # profile.proxy = Selenium::WebDriver::Proxy.new http: '199.247.13.177:31280', ssl: '199.247.13.177:31280'
           options = Selenium::WebDriver::Chrome::Options.new(profile: profile)
+          chrome_bin_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
+          options.binary = chrome_bin_path if chrome_bin_path # only use custom path on heroku
+          # options.add_argument('--headless') # this may be optional \
           client = Selenium::WebDriver::Remote::Http::Default.new
           client.read_timeout = 150 # instead of the default 60
           client.open_timeout = 150 # instead of the default 60
