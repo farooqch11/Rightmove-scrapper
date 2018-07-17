@@ -12,14 +12,14 @@ class CrawlWorker
   def perform(url,total_pages)
 
       begin
-        Capybara.register_driver :firefox do |app|
-          profile = Selenium::WebDriver::Firefox::Profile.new
+        Capybara.register_driver :chrome do |app|
+          profile = Selenium::WebDriver::Chrome::Profile.new
           profile['permissions.default.image']       = 2
           profile['network.cookie.cookieBehavior']       = 2
           # profile['permissions.default.css']       = 2
           # profile['general.useragent.override'] = "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.9 (KHTML, like Gecko) Hana/1.1"
           # profile.proxy = Selenium::WebDriver::Proxy.new http: '199.247.13.177:31280', ssl: '199.247.13.177:31280'
-          options = Selenium::WebDriver::Firefox::Options.new(profile: profile)
+          options = Selenium::WebDriver::Chrome::Options.new(profile: profile)
           client = Selenium::WebDriver::Remote::Http::Default.new
           client.read_timeout = 150 # instead of the default 60
           client.open_timeout = 150 # instead of the default 60
@@ -28,13 +28,13 @@ class CrawlWorker
           options.args << '--disable-gpu'
           options.args << '--disable-infobars'
 
-          Capybara::Selenium::Driver.new(app,browser: :firefox, options: options, http_client: client)
+          Capybara::Selenium::Driver.new(app,browser: :chrome, options: options, http_client: client)
         end
 
-        Capybara.javascript_driver = :firefox
+        Capybara.javascript_driver = :chrome
         Capybara.configure do |config|
           # config.default_max_wait_time = 300 # seconds
-          config.default_driver = :firefox
+          config.default_driver = :chrome
         end
 
         # Visit
