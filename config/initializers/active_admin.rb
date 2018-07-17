@@ -4,7 +4,7 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Shopify Middleware"
+  config.site_title = "Right Move"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -232,20 +232,20 @@ ActiveAdmin.setup do |config|
 
   # == Download Links
   #
-  # You can disable download links on resource listing pages,
+  # You can disable download properties on resource listing pages,
   # or customize the formats shown per namespace/globally
   #
   # To disable/customize for the :admin namespace:
   #
   #   config.namespace :admin do |admin|
   #
-  #     # Disable the links entirely
+  #     # Disable the properties entirely
   #     admin.download_links = false
   #
   #     # Only show XML & PDF options
   #     admin.download_links = [:xml, :pdf]
   #
-  #     # Enable/disable the links based on block
+  #     # Enable/disable the properties based on block
   #     #   (for example, with cancan)
   #     admin.download_links = proc { can?(:view_download_links) }
   #

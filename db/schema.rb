@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_11_144838) do
+ActiveRecord::Schema.define(version: 2018_07_17_102639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,27 +46,15 @@ ActiveRecord::Schema.define(version: 2018_07_11_144838) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "inventories", force: :cascade do |t|
-    t.string "sku"
-    t.string "name"
-    t.bigint "shopify_variant"
-    t.bigint "product_id"
+  create_table "properties", force: :cascade do |t|
+    t.string "title"
+    t.string "asking_price"
+    t.string "location"
+    t.string "last_sold_price"
+    t.string "upload_date"
+    t.string "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "orders", force: :cascade do |t|
-    t.string "name"
-    t.text "order_detail"
-    t.string "madewell_id"
-    t.bigint "shopify_id"
-    t.integer "status"
-    t.decimal "price"
-    t.string "customer_name"
-    t.jsonb "details", default: "{}"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["details"], name: "index_orders_on_details", using: :gin
   end
 
 end

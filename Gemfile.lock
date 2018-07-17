@@ -41,18 +41,10 @@ GEM
       globalid (>= 0.3.6)
     activemodel (5.2.0)
       activesupport (= 5.2.0)
-    activemodel-serializers-xml (1.0.2)
-      activemodel (> 5.x)
-      activesupport (> 5.x)
-      builder (~> 3.1)
     activerecord (5.2.0)
       activemodel (= 5.2.0)
       activesupport (= 5.2.0)
       arel (>= 9.0)
-    activeresource (5.0.0)
-      activemodel (>= 5.0, < 6)
-      activemodel-serializers-xml (~> 1.0)
-      activesupport (>= 5.0, < 6)
     activestorage (5.2.0)
       actionpack (= 5.2.0)
       activerecord (= 5.2.0)
@@ -71,7 +63,7 @@ GEM
     arel (9.0.0)
     bcrypt (3.1.12)
     bindex (0.5.0)
-    bootsnap (1.3.0)
+    bootsnap (1.3.1)
       msgpack (~> 1.0)
     builder (3.2.3)
     byebug (10.0.2)
@@ -84,9 +76,7 @@ GEM
       xpath (~> 3.1)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
-    chromedriver-helper (1.2.0)
-      archive-zip (~> 0.10)
-      nokogiri (~> 1.8)
+    coderay (1.1.2)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -106,7 +96,7 @@ GEM
       warden (~> 1.2.3)
     dotenv (2.5.0)
     erubi (1.7.1)
-    et-orbi (1.1.2)
+    et-orbi (1.1.3)
       tzinfo
     execjs (2.7.0)
     ffi (1.9.25)
@@ -118,12 +108,10 @@ GEM
     fugit (1.1.3)
       et-orbi (~> 1.1, >= 1.1.1)
       raabro (~> 1.1)
+    geckodriver-helper (0.21.0)
+      archive-zip (~> 0.7)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    graphql (1.8.4)
-    graphql-client (0.12.3)
-      activesupport (>= 3.0, < 6.0)
-      graphql (~> 1.6)
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
@@ -184,8 +172,11 @@ GEM
     pg (1.0.0)
     polyamorous (1.3.3)
       activerecord (>= 3.0)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
     public_suffix (3.0.2)
-    puma (3.11.4)
+    puma (3.12.0)
     raabro (1.1.6)
     rack (2.0.5)
     rack-protection (2.0.3)
@@ -246,10 +237,6 @@ GEM
     selenium-webdriver (3.13.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
-    shopify_api (4.12.0)
-      activeresource (>= 3.0.0)
-      graphql-client
-      rack
     sidekiq (5.1.3)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -280,7 +267,7 @@ GEM
     turbolinks-source (5.1.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    uglifier (4.1.14)
+    uglifier (4.1.15)
       execjs (>= 0.3.0, < 3)
     warden (1.2.7)
       rack (>= 1.0)
@@ -302,24 +289,25 @@ DEPENDENCIES
   activeadmin
   bootsnap (>= 1.1.0)
   byebug
-  capybara (>= 2.15, < 4.0)
-  chromedriver-helper
+  capybara
   coffee-rails (~> 4.2)
   csv
   devise
   dotenv
   figaro
+  geckodriver-helper (>= 0.0.5)
   httparty
   jbuilder (~> 2.5)
   json
   json_converter
   listen (>= 3.0.5, < 3.2)
+  nokogiri
   pg
+  pry
   puma (~> 3.11)
   rails (~> 5.2.0)
   sass-rails (~> 5.0)
   selenium-webdriver
-  shopify_api
   sidekiq
   sidekiq-cron
   sidekiq-failures
