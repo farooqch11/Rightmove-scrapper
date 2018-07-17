@@ -69,5 +69,5 @@ gem 'selenium-webdriver'
 gem 'nokogiri'
 gem 'capybara'
 gem 'pry'
-gem 'geckodriver-helper' ,'>= 0.0.5'
+# gem 'geckodriver-helper' ,'>= 0.0.5'
 gem "chromedriver-helper"
