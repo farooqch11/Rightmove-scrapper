@@ -18,8 +18,8 @@ class CrawlWorker
           profile['network.cookie.cookieBehavior']       = 2
           # profile['permissions.default.css']       = 2
           # profile['general.useragent.override'] = "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.9 (KHTML, like Gecko) Hana/1.1"
-          proxy = Selenium::WebDriver::Proxy.new http: '37.48.118.90:13040', ssl: '37.48.118.90:13040'
-          caps = Selenium::WebDriver::Remote::Capabilities.chrome(:proxy => proxy)
+          # proxy = Selenium::WebDriver::Proxy.new http: '37.48.118.90:13040', ssl: '37.48.118.90:13040'
+          # caps = Selenium::WebDriver::Remote::Capabilities.chrome(:proxy => proxy)
           options = Selenium::WebDriver::Chrome::Options.new(profile: profile)
           chrome_bin_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
           options.binary = chrome_bin_path if chrome_bin_path # only use custom path on heroku
@@ -33,7 +33,7 @@ class CrawlWorker
           options.args << '--disable-gpu'
           options.args << '--disable-infobars'
 
-          Capybara::Selenium::Driver.new(app,browser: :chrome, options: options, http_client: client,desired_capabilities: caps)
+          Capybara::Selenium::Driver.new(app,browser: :chrome, options: options, http_client: client)
         end
 
         Capybara.javascript_driver = :chrome
