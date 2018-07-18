@@ -18,11 +18,13 @@ class CrawlWorker
           profile['network.cookie.cookieBehavior']       = 2
           # profile['permissions.default.css']       = 2
           # profile['general.useragent.override'] = "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.9 (KHTML, like Gecko) Hana/1.1"
-          # profile.proxy = Selenium::WebDriver::Proxy.new http: '199.247.13.177:31280', ssl: '199.247.13.177:31280'
+          proxy = Selenium::WebDriver::Proxy.new http: '37.48.118.90:13040', ssl: '37.48.118.90:13040'
+          caps = Selenium::WebDriver::Remote::Capabilities.chrome(:proxy => proxy)
           options = Selenium::WebDriver::Chrome::Options.new(profile: profile)
           chrome_bin_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
           options.binary = chrome_bin_path if chrome_bin_path # only use custom path on heroku
           # options.add_argument('--headless') # this may be optional \
+
           client = Selenium::WebDriver::Remote::Http::Default.new
           client.read_timeout = 150 # instead of the default 60
           client.open_timeout = 150 # instead of the default 60
@@ -31,7 +33,7 @@ class CrawlWorker
           options.args << '--disable-gpu'
           options.args << '--disable-infobars'
 
-          Capybara::Selenium::Driver.new(app,browser: :chrome, options: options, http_client: client)
+          Capybara::Selenium::Driver.new(app,browser: :chrome, options: options, http_client: client,desired_capabilities: caps)
         end
 
         Capybara.javascript_driver = :chrome
@@ -45,13 +47,12 @@ class CrawlWorker
         driver = browser.driver.browser
         # driver.manage.timeouts.page_load = 120
 
-        (1..total_pages.to_i).each do |i|
+        (0..total_pages.to_i).each do |i|
 
-          if i==1
-            url = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E601&maxBedrooms=3&minBedrooms=3&maxPrice=100000&minPrice=50000&index=#{1}&propertyTypes=detached%2Csemi-detached%2Cterraced&primaryDisplayPropertyType=houses&includeSSTC=false"
+          if i==0
+            url = url
           else
-            url = "https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E601&maxBedrooms=3&minBedrooms=3&maxPrice=100000&minPrice=50000&index=#{i*24}&propertyTypes=detached%2Csemi-detached%2Cterraced&primaryDisplayPropertyType=houses&includeSSTC=false"
-
+            url = url + "&index=#{i*24}&"
           end
 
           puts url
@@ -108,6 +109,10 @@ class CrawlWorker
               upload_date = detail_page.xpath("//*[@id='firstListedDateValue']").text.squish;
               puts "#######################################"
               puts title, asking_price ,last_sold_price, location
+
+              asking_price = asking_price.gsub('From', '')
+              asking_price = asking_price.gsub('Offers in Region of', '')
+              asking_price = asking_price.gsub('Guide Price', '')
 
 
               Property.create(title: title,location: location,asking_price: asking_price,last_sold_price: last_sold_price,upload_date:upload_date,url: page_url)
