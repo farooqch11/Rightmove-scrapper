@@ -21,6 +21,7 @@ class CrawlWorker
           # proxy = Selenium::WebDriver::Proxy.new http: '37.48.118.90:13040', ssl: '37.48.118.90:13040'
           # caps = Selenium::WebDriver::Remote::Capabilities.chrome(:proxy => proxy)
           options = Selenium::WebDriver::Chrome::Options.new(profile: profile)
+          
           chrome_bin_path = ENV.fetch('GOOGLE_CHROME_SHIM', nil)
           options.binary = chrome_bin_path if chrome_bin_path # only use custom path on heroku
           # options.add_argument('--headless') # this may be optional \
