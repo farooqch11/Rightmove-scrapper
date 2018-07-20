@@ -4,8 +4,11 @@ ActiveAdmin.register Property do
   scope :all do |example|
     Property.all
   end
+  scope :incomplete do |example|
+    Property.where(complete: false,letter_sent: false,unfindable: false)
+  end
   scope :complete do |example|
-    Property.where(complete: true)
+    Property.where(complete: true, letter_sent: false ,unfindable: false)
   end
   scope :letter_sent do |example|
     Property.where(letter_sent: true)
